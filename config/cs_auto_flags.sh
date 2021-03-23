@@ -153,6 +153,8 @@ if test "x$GCC" = "xyes"; then
     cs_gcc=icx
   elif test -n "`echo $cs_ac_cc_version | grep clang`" ; then
     cs_gcc=clang
+  elif test -n "`echo $cs_ac_cc_version | grep Cray`" ; then
+    cs_gcc=cray
   else
     cs_gcc=gcc
   fi

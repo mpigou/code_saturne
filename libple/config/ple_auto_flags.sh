@@ -91,6 +91,8 @@ if test "x$GCC" = "xyes"; then
     ple_gcc=icx
   elif test -n "`echo $ple_ac_cc_version | grep clang`" ; then
     ple_gcc=clang
+  elif test -n "`echo $ple_ac_cc_version | grep Cray`" ; then
+    ple_gcc=cray
   else
     ple_gcc=gcc
   fi
