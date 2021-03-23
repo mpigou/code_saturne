@@ -93,6 +93,8 @@ if test "x$GCC" = "xyes"; then
     ple_gcc=clang
   elif test -n "`echo $ple_ac_cc_version | grep Cray`" ; then
     ple_gcc=cray
+  elif test -n "`echo $ple_ac_cc_version | grep FCC`" ; then
+    ple_gcc=fujitsu
   else
     ple_gcc=gcc
   fi
@@ -341,6 +343,35 @@ if test "x$ple_cc_compiler_known" != "xyes" ; then
     cflags_default_opt="-O2"
     cflags_default_dbg="-g"
     cflags_default_omp="-h omp"              # default: use "-h noomp" to disable
+
+    # Default  linker flags
+    ldflags_default=""
+    ldflags_default_opt="-O2"
+    ldflags_default_dbg="-g"
+
+  fi
+fi
+
+# Otherwise, are we using the Cray compiler ?
+#--------------------------------------------
+
+if test "x$ple_cc_compiler_known" != "xyes" ; then
+
+  $CC -V 2>&1 | grep 'Fujitsu C/C++' > /dev/null
+  if test "$?" = "0" ; then
+
+    echo "compiler '$CC' is Fujitsu C compiler"
+
+    # Version strings for logging purposes and known compiler flag
+    ple_ac_cc_version=`$CC -V 2>&1 | grep "Fujitsu C" | head -1`
+    ple_cc_compiler_known=yes
+    ple_linker_set=yes
+
+    # Default compiler flags
+    cflags_default="-x c11 -mcpu=a64fx -fPIC"
+    cflags_default_opt="-O2"
+    cflags_default_dbg="-g"
+    cflags_default_omp="-fopenmp"
 
     # Default  linker flags
     ldflags_default=""
