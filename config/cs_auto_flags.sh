@@ -480,6 +480,8 @@ if test "x$GXX" = "xyes"; then
     cs_gxx=icpx
   elif test -n "`echo $cs_ac_cxx_version | grep clang`" ; then
     cs_gxx=clang
+  elif test -n "`echo $cs_ac_cxx_version | grep Cray`" ; then
+    cs_gxx=cray
   else
     cs_gxx=g++
   fi
