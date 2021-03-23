@@ -53,7 +53,7 @@ use ppincl
 use field
 use mesh
 use cs_c_bindings
-use darcy_module
+use darcy
 
 !===============================================================================
 

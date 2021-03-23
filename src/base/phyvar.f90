@@ -77,7 +77,7 @@ use field
 use field_operator
 use cavitation
 use vof
-use darcy_module
+use darcy
 use cs_c_bindings
 
 !===============================================================================

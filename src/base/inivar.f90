@@ -65,7 +65,7 @@ use vof
 
 use, intrinsic :: iso_c_binding
 
-use darcy_module
+use darcy
 
 !===============================================================================
 

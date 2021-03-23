@@ -99,7 +99,7 @@ use mesh
 use field
 use field_operator
 use cs_c_bindings
-use darcy_module
+use darcy
 use cs_c_bindings
 
 !===============================================================================

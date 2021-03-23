@@ -78,7 +78,7 @@ use cs_fuel_incl
 use mesh
 use field
 use cs_c_bindings
-use darcy_module
+use darcy
 
 !===============================================================================
 

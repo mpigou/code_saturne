@@ -92,7 +92,7 @@ use parall
 use period
 use cs_f_interfaces
 use atchem
-use darcy_module
+use darcy
 use cs_c_bindings
 
 !===============================================================================

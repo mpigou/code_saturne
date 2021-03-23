@@ -1573,7 +1573,7 @@ contains
 
     use, intrinsic :: iso_c_binding
     use cs_c_bindings
-    use cdomod
+    use cdomdo
     implicit none
 
     ! Local variables

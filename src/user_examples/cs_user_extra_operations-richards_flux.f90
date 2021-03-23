@@ -66,7 +66,7 @@ use field
 use field_operator
 use turbomachinery
 use cs_c_bindings
-use darcy_module
+use darcy
 
 !===============================================================================
 

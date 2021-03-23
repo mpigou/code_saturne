@@ -69,7 +69,7 @@ use ptrglo
 use turbomachinery
 use cs_c_bindings
 use cs_f_interfaces
-use cdomod
+use cdomdo
 
 use, intrinsic :: iso_c_binding
 

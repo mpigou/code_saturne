@@ -58,7 +58,7 @@ use cstnum
 use ppppar
 use ppthch
 use ppincl
-use darcy_module
+use darcy
 use cs_c_bindings
 
 !===============================================================================

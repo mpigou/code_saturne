@@ -191,7 +191,7 @@ use cpincl
 use field
 use cavitation
 use rotation
-use darcy_module
+use darcy
 use cs_c_bindings
 
 !===============================================================================
@@ -313,7 +313,7 @@ subroutine user_darcy_ini1
 !===============================================================================
 
 use entsor
-use darcy_module
+use darcy
 use cs_c_bindings
 use numvar
 

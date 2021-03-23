@@ -56,7 +56,6 @@
 #include "cs_field.h"
 #include "cs_field_pointer.h"
 #include "cs_gui_util.h"
-#include "cs_internal_coupling.h"
 #include "cs_log.h"
 #include "cs_math.h"
 #include "cs_mesh.h"
@@ -787,20 +786,19 @@ _cs_rad_transfer_sol(int                        gg_id,
             aa = 0.5 * (aa + CS_ABS(aa)) * domegat;
             f_snplus->val[face_id] += aa;
             f_qincid->val[face_id] += aa * radiance[cell_id];
+
           }
 
           /* Specific to Atmo (Direct Solar, diFfuse Solar, Infra Red) */
           if (cs_math_3_dot_product(cs_glob_physical_constants->gravity,
                                     vect_s) < 0.0 && f_up != NULL) {
             for (cs_lnum_t cell_id = 0; cell_id < n_cells; cell_id++)
-              f_up->val[gg_id + cell_id * stride]
-                += radiance[cell_id] * domegat * vect_s[2];//FIXME S.g/||g||
+              f_up->val[gg_id + cell_id * stride] += radiance[cell_id] * domegat * vect_s[2];//FIXME S.g/||g||
           }
           else if (cs_math_3_dot_product(cs_glob_physical_constants->gravity,
                                          vect_s) > 0.0 && f_down != NULL) {
             for (cs_lnum_t cell_id = 0; cell_id < n_cells; cell_id++)
-              f_down->val[gg_id + cell_id * stride]
-                += radiance[cell_id] * domegat * vect_s[2];
+              f_down->val[gg_id + cell_id * stride] += radiance[cell_id] * domegat * vect_s[2];
           }
         }
       }
@@ -913,6 +911,11 @@ _compute_net_flux(const int        itypfb[],
   const cs_real_t c_stefan = cs_physical_constants_stephan;
   cs_real_t  xmissing = -cs_math_big_r * 0.2;
 
+  /* Initializations */
+
+  /* Net flux dendity for the boundary faces
+   * The provided examples are sufficient in most of cases.*/
+
   /* If the boundary conditions given above have been modified
    *   it is necessary to change the way in which density is calculated from
    *   the net radiative flux consistently.*/
@@ -953,94 +956,6 @@ _compute_net_flux(const int        itypfb[],
       net_flux[ifac] = xmissing;
 
   }
-}
-
-/*----------------------------------------------------------------------------*/
-/*!
- * \brief Set absolrption coefficient to zeor by default in solid zones.
- *
- * This could be overwritten if necessary the cs_user_rad_transfer_absorption
- * function.
- *
- * The medium is considered transparent to avoid interaction with
- * the radiation model. For semi-transparent solids, it could be modified.
- *
- * \param[out]  ck       medium's absorption coefficient (zero if transparent)
- */
-/*----------------------------------------------------------------------------*/
-
-static void
-_internal_coupling_zero_solid_absorption(cs_real_t  ck[])
-{
-  int n_zones = cs_volume_zone_n_zones();
-
-  for (int i = 0; i < n_zones; i++) {
-    const cs_zone_t  *z = cs_volume_zone_by_id(i);
-    if (z->type & CS_VOLUME_ZONE_SOLID) {
-      for (cs_lnum_t j = 0; j < z->n_elts; j++) {
-        cs_lnum_t cell_id = z->elt_ids[j];
-        ck[cell_id] = 0;
-      }
-    }
-  }
-}
-
-/*----------------------------------------------------------------------------*/
-/*!
- * \brief Compute the internal coupling contribution from
- *        the net radiation flux.
- *
- * \param[in, out]  cpl       internal coupling structure
- * \param[in]       net_flux  net flux (W/m2)
- */
-/*----------------------------------------------------------------------------*/
-
-static void
-_net_flux_internal_coupling_contribution(cs_internal_coupling_t  *cpl,
-                                         const cs_real_t          net_flux[])
-{
-  const cs_mesh_quantities_t *mq = cs_glob_mesh_quantities;
-  const cs_mesh_t *m = cs_glob_mesh;
-
-  /* Bulk implicit and explicit source terms */
-  cs_real_t *rad_estm = CS_FI_(rad_est, 0)->val;
-
-  cs_lnum_t  n_local = 0, n_distant = 0;
-  const cs_lnum_t *faces_local = NULL, *faces_distant = NULL;
-
-  cs_internal_coupling_coupled_faces(cpl,
-                                     &n_local,
-                                     &faces_local,
-                                     &n_distant,
-                                     &faces_distant);
-
-  cs_real_t *net_flux_local, *net_flux_distant;
-  BFT_MALLOC(net_flux_local, n_local, cs_real_t);
-  BFT_MALLOC(net_flux_distant, n_distant, cs_real_t);
-
-  /* Compute radiant net flux at internal coupling boundary face */
-
-  for (cs_lnum_t i = 0; i < n_distant; i++) {
-    cs_lnum_t face_id = faces_distant[i];
-    net_flux_distant[i] = net_flux[face_id];
-  }
-
-  cs_internal_coupling_exchange_var(cpl,
-                                    1, /* Dimension */
-                                    net_flux_distant,
-                                    net_flux_local);
-
-  for (cs_lnum_t i = 0; i < n_local; i++) {
-    cs_lnum_t face_id = faces_local[i];
-    cs_lnum_t cell_id = m->b_face_cells[face_id];
-
-    rad_estm[cell_id] +=   net_flux_local[i]
-                         * mq->b_face_surf[face_id]
-                         / mq->cell_vol[cell_id];
-  }
-
-  BFT_FREE(net_flux_local);
-  BFT_FREE(net_flux_distant);
 }
 
 /*! (DOXYGEN_SHOULD_SKIP_THIS) \endcond */
@@ -1329,7 +1244,7 @@ cs_rad_transfer_solve(int               bc_type[],
     if (temp_field != NULL)
       cvara_scalt = temp_field->vals[1];
     else
-      cvara_scalt = CS_FI_(t, 0)->val;
+      cvara_scalt = CS_FI_(t,0)->val;
 
     for (cs_lnum_t cell_id = 0; cell_id < n_cells; cell_id++)
       tempk[cell_id] = cvara_scalt[cell_id] + xptk;
@@ -1390,9 +1305,9 @@ cs_rad_transfer_solve(int               bc_type[],
     if (   rt_params->type == CS_RAD_TRANSFER_P1
         && cs_glob_physical_model_flag[CS_PHYSICAL_MODEL_FLAG] <= 1
         && ipadom <= 3)
+
       cs_rad_transfer_absorption_check_p1(ckg);
 
-    _internal_coupling_zero_solid_absorption(ckg);
 
     /* Only necessary when grey gas radiation properties are applied.
        In case of the ADF model this test does not make sense. */
@@ -1468,7 +1383,8 @@ cs_rad_transfer_solve(int               bc_type[],
 
   for (int gg_id = 0; gg_id < nwsgg; gg_id++) {
 
-    if (rt_params->imoadf >= 1 || rt_params->imfsck == 1) {
+    if (   rt_params->imoadf >= 1
+        || rt_params->imfsck == 1) {
 
       assert(gg_id == 0); /* TODO: merge ckg and kgi ? */
       for (cs_lnum_t cell_id = 0; cell_id < n_cells; cell_id++)
@@ -2143,22 +2059,6 @@ cs_rad_transfer_solve(int               bc_type[],
      * post-processing of that term when the transported variable is the
      * temperature (for combustion, it is always enthalpy) */
 
-  }
-
-  /* Internal coupling contribution */
-  if (cs_internal_coupling_n_couplings() > 0) {
-    cs_internal_coupling_t *cpl = NULL;
-
-    cs_field_t *tf = cs_thermal_model_field();
-    if (tf != NULL) {
-      const int coupling_key_id = cs_field_key_id("coupling_entity");
-      int coupling_id = cs_field_get_key_int(tf, coupling_key_id);
-      if (coupling_id >= 0)
-        cpl = cs_internal_coupling_by_id(coupling_id);
-    }
-
-    if (cpl != NULL)
-      _net_flux_internal_coupling_contribution(cpl, f_fnet->val);
   }
 
   if (verbosity > 0)

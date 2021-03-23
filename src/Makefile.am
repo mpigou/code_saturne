@@ -55,7 +55,7 @@ base/alaste.f90 \
 base/albase.f90 \
 base/alstru.f90 \
 base/cavitation.f90 \
-base/cdomod.f90 \
+base/cdomdo.f90 \
 base/cplsat.f90 \
 base/cstphy.f90 \
 base/cstnum.f90 \
@@ -96,7 +96,7 @@ cogz/coincl.f90 \
 rayt/radiat.f90 \
 base/vof.f90 \
 base/ptrglo.f90 \
-darc/darcy_module.f90 \
+darc/darcy.f90 \
 base/turbomachinery.f90
 
 # Module dependencies (handled manually, as Automake does
@@ -126,7 +126,7 @@ base/field_operator.lo: base/paramx.lo base/dimens.lo base/mesh.lo \
  base/optcal.lo base/field.lo
 base/numvar.lo: base/paramx.lo
 base/optcal.lo: base/paramx.lo base/field.lo base/numvar.lo base/cstphy.lo \
- base/cs_c_bindings.lo base/cdomod.lo
+ base/cs_c_bindings.lo base/cdomdo.lo
 base/pointe.lo: base/paramx.lo base/numvar.lo base/mesh.lo base/parall.lo \
  base/period.lo base/optcal.lo base/entsor.lo lagr/lagran.lo rayt/radiat.lo \
  pprt/ppincl.lo base/albase.lo base/cstnum.lo base/cs_c_bindings.lo
@@ -153,7 +153,7 @@ pprt/ppcpfu.lo: pprt/ppthch.lo pprt/ppppar.lo
 pprt/ppincl.lo: pprt/ppppar.lo pprt/ppthch.lo
 pprt/ppthch.lo: base/cstphy.lo
 rayt/radiat.lo: pprt/ppppar.lo pprt/ppincl.lo base/optcal.lo pprt/ppcpfu.lo base/numvar.lo
-darc/darcy_module.lo: base/paramx.lo
+darc/darcy.lo: base/paramx.lo
 cfbl/cfpoin.lo: pprt/ppincl.lo
 
 # Additional local targets

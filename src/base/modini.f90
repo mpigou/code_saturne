@@ -45,7 +45,7 @@ use cplsat
 use post
 use ppincl
 use rotation
-use darcy_module
+use darcy
 use turbomachinery
 use vof
 use cs_c_bindings

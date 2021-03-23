@@ -63,7 +63,7 @@ use cavitation
 use vof
 use cs_cf_bindings
 use cs_c_bindings
-use darcy_module
+use darcy
 
 !===============================================================================
 

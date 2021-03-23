@@ -20,10 +20,10 @@
 
 !-------------------------------------------------------------------------------
 
-!> \file darcy_module.f90
+!> \file darcy.f90
 !> \brief Module for Darcy calculation options
 
-module darcy_module
+module darcy
 
   !=============================================================================
 
@@ -35,9 +35,9 @@ module darcy_module
 
   !=============================================================================
 
-  !> \defgroup darcy_module Module for variable numbering
+  !> \defgroup darcy Module for variable numbering
 
-  !> \addtogroup darcy_module
+  !> \addtogroup darcy
   !> \{
 
   !-----------------------------------------------------------------------------
@@ -92,4 +92,4 @@ module darcy_module
 
   !> \}
 
-end module darcy_module
+end module darcy

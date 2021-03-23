@@ -59,7 +59,7 @@ use mesh
 use post
 use field
 use cs_c_bindings
-use darcy_module
+use darcy
 
 !===============================================================================
 

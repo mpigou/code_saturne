@@ -71,7 +71,7 @@ use cs_coal_incl
 use cs_c_bindings
 use cs_cf_bindings
 use field
-use cdomod
+use cdomdo
 
 !===============================================================================
 

@@ -75,7 +75,7 @@ use mesh
 use field
 use rotation
 use turbomachinery
-use darcy_module
+use darcy
 use cs_f_interfaces
 use cs_c_bindings
 use cs_tagmr, only: rob, condb, cpb, hext, text
@@ -83,7 +83,7 @@ use cs_tagms, only: t_metal, tmet0
 use cs_nz_tagmr
 use cs_nz_condensation
 use turbomachinery
-use cdomod
+use cdomdo
 
 ! les " use pp* " ne servent que pour recuperer le pointeur IIZFPP
 

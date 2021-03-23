@@ -179,7 +179,7 @@ use field
 use field_operator
 use radiat
 use turbomachinery
-use darcy_module
+use darcy
 use cs_c_bindings
 
 !===============================================================================
@@ -5171,7 +5171,7 @@ use field
 use field_operator
 use radiat
 use turbomachinery
-use darcy_module
+use darcy
 use cs_c_bindings
 
 !===============================================================================
