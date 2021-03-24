@@ -95,6 +95,8 @@ if test "x$GCC" = "xyes"; then
     ple_gcc=cray
   elif test -n "`echo $ple_ac_cc_version | grep FCC`" ; then
     ple_gcc=fujitsu
+  elif test -n "`echo $ple_ac_cc_version | grep Arm`" ; then
+    ple_gcc=arm
   else
     ple_gcc=gcc
   fi
@@ -352,7 +354,7 @@ if test "x$ple_cc_compiler_known" != "xyes" ; then
   fi
 fi
 
-# Otherwise, are we using the Cray compiler ?
+# Otherwise, are we using the Fujitsu compiler ?
 #--------------------------------------------
 
 if test "x$ple_cc_compiler_known" != "xyes" ; then
@@ -368,7 +370,36 @@ if test "x$ple_cc_compiler_known" != "xyes" ; then
     ple_linker_set=yes
 
     # Default compiler flags
-    cflags_default="-x c11 -mcpu=a64fx -fPIC"
+    cflags_default="-x c11 -fPIC"
+    cflags_default_opt="-O2"
+    cflags_default_dbg="-g"
+    cflags_default_omp="-fopenmp"
+
+    # Default  linker flags
+    ldflags_default=""
+    ldflags_default_opt="-O2"
+    ldflags_default_dbg="-g"
+
+  fi
+fi
+
+# Otherwise, are we using the Arm compiler ?
+#--------------------------------------------
+
+if test "x$ple_cc_compiler_known" != "xyes" ; then
+
+  $CC -v 2>&1 | grep 'Arm C/C++/Fortran' > /dev/null
+  if test "$?" = "0" ; then
+
+    echo "compiler '$CC' is Arm C compiler"
+
+    # Version strings for logging purposes and known compiler flag
+    ple_ac_cc_version=`$CC -v 2>&1 | grep "Arm C/C++/Fortran" | head -1`
+    ple_cc_compiler_known=yes
+    ple_linker_set=yes
+
+    # Default compiler flags
+    cflags_default="-std=c11 -fPIC"
     cflags_default_opt="-O2"
     cflags_default_dbg="-g"
     cflags_default_omp="-fopenmp"
