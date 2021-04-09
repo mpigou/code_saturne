@@ -373,7 +373,7 @@ if test "x$ple_cc_compiler_known" != "xyes" ; then
     cflags_default="-x c11 -fPIC"
     cflags_default_opt="-O2"
     cflags_default_dbg="-g"
-    cflags_default_omp="-fopenmp"
+    cflags_default_omp="-Kopenmp"
 
     # Default  linker flags
     ldflags_default=""

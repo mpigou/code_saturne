@@ -195,7 +195,7 @@ if test "x$cs_gcc" = "xgcc"; then
   # Default compiler flags
   cflags_default="-funsigned-char -W -Wall -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wunused -Wfloat-equal -Werror=implicit-function-declaration"
   cflags_default_dbg="-g"
-  cflags_default_opt="-O2"
+  cflags_default_opt="-O3"
   cflags_default_hot="-O3"
   cflags_default_omp="-fopenmp"
 
@@ -441,9 +441,9 @@ if test "x$cs_cc_compiler_known" != "xyes" ; then
     # Default compiler flags
     cflags_default="-x c11 -fPIC"
     cflags_default_opt="-O2"
-    cflags_default_hot="-O2"
+    cflags_default_hot="-O3"
     cflags_default_dbg="-g"
-    cflags_default_omp="-fopenmp"
+    cflags_default_omp="-Kopenmp"
 
     # Default  linker flags
     ldflags_default=""
@@ -586,7 +586,7 @@ if test "x$cs_gxx" = "xg++"; then
   # Default compiler flags
   cxxflags_default="-W -Wall -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Wunused -Wfloat-equal"
   cxxflags_default_dbg="-g"
-  cxxflags_default_opt="-O2"
+  cxxflags_default_opt="-O3"
   cxxflags_default_hot="-O3"
   cxxflags_default_omp="-fopenmp"
   cxxflags_default_std="-funsigned-char"
@@ -821,9 +821,9 @@ if test "x$cs_cxx_compiler_known" != "xyes" ; then
     # Default compiler flags
     cxxflags_default="-x c++11 -fPIC"
     cxxflags_default_opt="-O2"
-    cxxflags_default_hot="-O2"  # Bug observed when -O3 is used
+    cxxflags_default_hot="-O3"  # Bug observed when -O3 is used
     cxxflags_default_dbg="-g"
-    cfxxlags_default_omp="-fopenmp"
+    cfxxlags_default_omp="-Kopenmp"
     cxxflags_default_std=""
   fi
 fi
@@ -947,7 +947,7 @@ if test "$?" = "0" ; then
   # Default compiler flags
   fcflags_default="-x f95-cpp-input -Wall -pedantic-errors -std=f2003"
   fcflags_default_dbg="-g -fcheck=bounds"
-  fcflags_default_opt="-O"
+  fcflags_default_opt="-O2"
   fcflags_default_hot="-O2"
   fcflags_default_omp="-fopenmp"
 
@@ -1134,7 +1134,7 @@ if test "x$cs_fc_compiler_known" != "xyes" ; then
     fcflags_default="-cpp -fPIC"
     fcflags_default_dbg="-g"
     fcflags_default_opt="-O2"
-    fcflags_default_omp="-fopenmp"
+    fcflags_default_omp="-Kopenmp"
 
   fi
 fi
